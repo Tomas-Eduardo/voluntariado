@@ -1,0 +1,104 @@
+<p-toast></p-toast>
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+>
+  <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full m-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Contacto</h2>
+    <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="space-y-4">
+      <div class="flex flex-col">
+        <label for="name" class="mb-2 font-medium text-gray-700">Nombre</label>
+        <input
+          pInputText
+          id="nombre"
+          name="nombre"
+          [(ngModel)]="contact.nombre"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Tu nombre"
+        />
+        @if (errors?.nombre) {
+          <div class="bg-red-100 border mt-2 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errors.nombre }}</span>
+          </div>
+          }
+      </div>
+      <div class="flex flex-col">
+        <label for="email" class="mb-2 font-medium text-gray-700"
+          >Correo electrónico</label
+        >
+        <input
+          pInputText
+          id="email"
+          name="email"
+          [(ngModel)]="contact.email"
+          required
+          email
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="tu@email.com"
+        />
+        @if (errors?.email) {
+          <div class="bg-red-100 border mt-2 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errors.email }}</span>
+          </div>
+          }
+      </div>
+      <div class="flex flex-col">
+        <label for="subject" class="mb-2 font-medium text-gray-700"
+          >Asunto</label
+        >
+        <input
+          pInputText
+          id="asunto"
+          name="asunto"
+          [(ngModel)]="contact.asunto"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Asunto del mensaje"
+        />
+        @if (errors?.asunto) {
+          <div class="bg-red-100 border mt-2 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errors.asunto }}</span>
+          </div>
+          }
+      </div>
+      <div class="flex flex-col">
+        <label for="message" class="mb-2 font-medium text-gray-700"
+          >Mensaje</label
+        >
+        <textarea
+          pInputTextarea
+          id="mensaje"
+          name="message"
+          [(ngModel)]="contact.mensaje"
+          required
+          rows="5"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Tu mensaje aquí"
+        ></textarea>
+        @if (errors?.mensaje) {
+          <div class="bg-red-100 border mt-2 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errors.mensaje }}</span>
+          </div>
+          }
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          pButton
+          type="submit"
+          class="p-button-sm p-button-secondary bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          [disabled]="!contactForm.form.valid"
+        >
+          Enviar Mensaje
+        </button>
+        <button
+          pButton
+          type="button"
+          (click)="onClose()"
+          class="p-button-sm p-button-primary bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

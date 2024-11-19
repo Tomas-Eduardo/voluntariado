@@ -1,0 +1,49 @@
+<div
+  class="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center p-4"
+>
+  <div
+    class="w-full max-w-4xl bg-white/80 backdrop-blur-sm shadow-xl rounded-lg"
+  >
+    <div class="p-6 text-center">
+      <h1 class="text-4xl font-bold text-blue-800 mb-4">
+        Bienvenido a Gestion de Voluntariado
+      </h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Conectamos corazones solidarios con causas que importan
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        @for (feature of features; track feature.title) {
+        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow">
+          <i class="{{ feature.icon }} text-4xl mb-2"></i>
+          <h2 class="text-xl font-semibold mt-2 mb-1">{{ feature.title }}</h2>
+          <p class="text-gray-600">{{ feature.description }}</p>
+        </div>
+        }
+      </div>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a
+          class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          (click)="showRegister = true"
+          >Comenzar como Voluntario</a
+        >
+        <a
+          class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          (click)="showOrganizacionForm = true"
+          >Registrar Organización</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <app-register
+    *ngIf="showRegister"
+    (close)="showRegister = false"
+  ></app-register>
+  <app-organizacion-form
+    *ngIf="showOrganizacionForm"
+    (close)="showOrganizacionForm = false"
+  >
+  </app-organizacion-form>
+</div>

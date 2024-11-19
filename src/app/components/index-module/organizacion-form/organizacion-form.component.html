@@ -1,0 +1,168 @@
+<p-toast></p-toast>
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+>
+  <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full m-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+      Registro de Organización
+    </h2>
+    <form (ngSubmit)="onSubmit()" #orgForm="ngForm">
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">
+          Nombre de Organización
+        </label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          placeholder="Ingrese el nombre de la organización"
+          [(ngModel)]="org.nombre"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          #nombre="ngModel"
+        />
+        @if (errors?.nombre) {
+        <div class="text-danger text-red-600">{{ errors.nombre }}</div>
+        }
+      </div>
+
+      <div class="mb-4">
+        <label for="tipo" class="block text-gray-700 text-sm font-bold mb-2">
+          Tipo de Organización
+        </label>
+        <select
+          id="tipo"
+          name="tipo"
+          [(ngModel)]="org.tipo"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          #tipo="ngModel"
+        >
+          <option value="" disabled selected>Seleccione el tipo de organización</option>
+          <option value="ONG">ONG</option>
+          <option value="Fundación">Fundación</option>
+          <option value="Asociación">Asociación</option>
+        </select>
+        <div *ngIf="tipo.invalid && tipo.touched" class="text-danger text-red-600">
+          Por favor, seleccione el tipo de organización.
+        </div>
+      </div>
+      
+
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
+          Correo electrónico
+        </label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Ingrese su correo electrónico"
+          name="email"
+          [(ngModel)]="org.email"
+          required
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          #email="ngModel"
+        />
+        @if (errors?.email) {
+        <div class="text-danger text-red-600">{{ errors.email }}</div>
+        }
+      </div>
+        <div class="mb-4">
+          <label
+            for="telefono"
+            class="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Teléfono
+          </label>
+          <input
+            type="text"
+            id="telefono"
+            name="telefono"
+            [(ngModel)]="org.telefono"
+            placeholder="(+569) 12345678"
+            required
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            #telefono="ngModel"
+          />
+          @if (errors?.telefono) {
+          <div class="text-danger text-red-600">{{ errors.telefono }}</div>
+          }
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
+            Dirección
+          </label>
+          <input
+            type="text"
+            id="direccion"
+            placeholder="Ingrese la dirección de la organización"
+            name="direccion"
+            [(ngModel)]="org.direccion"
+            required
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            #direccion="ngModel"
+          />
+          @if (errors?.direccion) {
+          <div class="text-danger text-red-600">{{ errors.direccion }}</div>
+          }
+        </div>
+        <div class="mb-4">
+          <label
+            for="telefono"
+            class="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Website
+          </label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            [(ngModel)]="org.website"
+            placeholder="https://www.example.com"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            #website="ngModel"
+          />
+          @if (errors?.website) {
+          <div class="text-danger text-red-600">{{ errors.website }}</div>
+          }
+          <div class="mb-4">
+            <label for="message" class="block text-gray-700 text-sm font-bold mb-2 mt-2"
+              >Descripción</label
+            >
+            <textarea
+              pInputTextarea
+              id="descripcion"
+              name="descripcion"
+              [(ngModel)]="org.descripcion"
+              required
+              rows="5"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Descripción de la organización"
+              #descripcion="ngModel"
+            ></textarea>
+            @if (errors?.descripcion) {
+              <div class="bg-red-100 border mt-2 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ errors.descripcion }}</span>
+              </div>
+              }
+          </div>
+        </div>
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          [disabled]="orgForm.invalid"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          (click)="onClose()"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

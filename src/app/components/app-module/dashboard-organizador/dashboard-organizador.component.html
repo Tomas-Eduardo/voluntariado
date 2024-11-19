@@ -1,0 +1,86 @@
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-primary mb-6">Dashboard del Organizador</h1>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-6">
+      <p-card styleClass="h-full">
+        <div class="flex flex-col items-center justify-center h-full">
+          <h2 class="text-2xl font-semibold mb-2">Eventos Activos</h2>
+          <div class="text-4xl font-bold text-primary">5</div>
+          <p-button label="Crear Nuevo Evento" icon="pi pi-plus" styleClass="p-button-outlined mt-4"></p-button>
+        </div>
+      </p-card>
+
+      <p-card styleClass="h-full">
+        <div class="flex flex-col items-center justify-center h-full">
+          <h2 class="text-2xl font-semibold mb-2">Total Voluntarios</h2>
+          <div class="text-4xl font-bold text-primary">127</div>
+          <p-button label="Ver Todos los Voluntarios" icon="pi pi-users" styleClass="p-button-outlined mt-4"></p-button>
+        </div>
+      </p-card>
+
+      <p-card styleClass="h-full">
+        <div class="flex flex-col items-center justify-center h-full">
+          <h2 class="text-2xl font-semibold mb-2">Horas Donadas</h2>
+          <div class="text-4xl font-bold text-primary">1,240</div>
+          <p-button label="Ver Reporte Detallado" icon="pi pi-chart-bar" styleClass="p-button-outlined mt-4"></p-button>
+        </div>
+      </p-card>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+      <p-card header="Participación por Evento">
+        <p-chart type="bar" [data]="eventParticipationData" [options]="chartOptions" height="300px"></p-chart>
+      </p-card>
+
+      <p-card header="Distribución de Voluntarios">
+        <p-chart type="pie" [data]="volunteerDistributionData" [options]="chartOptions" height="300px"></p-chart>
+      </p-card>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <p-card header="Próximos Eventos">
+        <p-table [value]="upcomingEvents" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre del Evento</th>
+              <th>Fecha</th>
+              <th>Progreso de Inscripción</th>
+              <th>Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-event>
+            <tr>
+              <td>{{event.name}}</td>
+              <td>{{event.date}}</td>
+              <td>
+                <p-progressBar [value]="event.registrationProgress" [showValue]="false"></p-progressBar>
+                <small class="text-muted">{{event.registeredVolunteers}}/{{event.totalSpots}}</small>
+              </td>
+              <td>
+                <p-tag [value]="event.status" [severity]="getEventStatusSeverity(event.status)"></p-tag>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+
+      <p-card header="Voluntarios Destacados">
+        <p-table [value]="topVolunteers" [rows]="5" [paginator]="true" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre</th>
+              <th>Eventos Participados</th>
+              <th>Horas Donadas</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-volunteer>
+            <tr>
+              <td>{{volunteer.name}}</td>
+              <td>{{volunteer.eventsParticipated}}</td>
+              <td>{{volunteer.hoursDonated}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
