@@ -1,0 +1,15 @@
+:host ::ng-deep {
+    .p-dropdown, .p-multiselect {
+      width: 100%;
+    }
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .p-multiselect-token {
+      background-color: #ebf8ff;
+      color: #2c5282;
+    }
+  }

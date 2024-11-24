@@ -1,61 +1,99 @@
-<div class="container mx-auto p-6">
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-primary mb-2">¡Bienvenido {{ userName }} a tu Dashboard!</h1>
-      <p class="text-gray-600">Explora eventos y organizaciones en tu comunidad</p>
-    </div>
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-2">¡Bienvenido a tu Dashboard!</h1>
+    <p class="text-gray-600 mb-8">
+      Explora eventos y organizaciones en tu comunidad
+    </p>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- Eventos Disponibles -->
-      <p-card header="Eventos Disponibles" subheader="Oportunidades de voluntariado actuales">
-        <p-scrollPanel [style]="{width: '100%', height: '600px'}">
-          <div class="space-y-4">
-            <p-card *ngFor="let event of events" styleClass="mb-4">
-              <div class="flex items-start gap-4">
-                <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <mat-icon class="text-blue-500 text-3xl">event</mat-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="font-semibold mb-1">{{ event.name }}</h3>
-                  <div class="space-y-1 text-sm text-gray-600">
-                    <div class="flex items-center gap-2">
-                      <mat-icon class="text-sm">place</mat-icon>
-                      <span>{{ event.location }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <mat-icon class="text-sm">access_time</mat-icon>
-                      <span>{{ event.time }}</span>
-                    </div>
-                  </div>
-                  <p-button label="Inscribirse" styleClass="p-button-sm mt-3 "></p-button>
-                </div>
-              </div>
-            </p-card>
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Eventos Section -->
+      <p-card styleClass="border-0 shadow-lg">
+        <ng-template pTemplate="header">
+          <h2 class="text-2xl font-bold p-4">Eventos Disponibles</h2>
+          <p class="text-gray-600 px-4 pb-4">
+            Oportunidades de voluntariado actuales
+          </p>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <!-- Verificar si hay eventos disponibles -->
+          <div *ngIf="events.length === 0" class="text-center py-8 text-lg text-gray-500">
+            No hay eventos disponibles en este momento.
           </div>
-        </p-scrollPanel>
+          <!-- Mostrar eventos -->
+          <div
+            *ngFor="let evento of events"
+            class="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+          >
+            <div
+              class="flex justify-between items-start mb-4"
+              *ngIf="!evento.isUserRegistered"
+            >
+              <h3 class="font-semibold text-lg text-primary">
+                {{ evento.nombre }}
+              </h3>
+              <p-badge
+                [value]="evento.fecha | date: 'dd/MM/yyyy'"
+                severity="secondary"
+              ></p-badge>
+            </div>
+            <p class="text-gray-600 mb-4">{{ evento.descripcion }}</p>
+            <div class="grid gap-2 text-sm text-gray-500">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-clock"></i>
+                <span>{{ formatTime(evento.horario) }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="pi pi-map-marker"></i>
+                <span>{{ evento.direccion }}, {{ evento.ciudad }}</span>
+              </div>
+            </div>
+            <!-- Solo mostrar el botón de inscripción si no está inscrito -->
+            <p-button
+              label="Inscribirse"
+              icon="pi pi-arrow-right"
+              (onClick)="inscribirse(evento.id)"
+              iconPos="right"
+              styleClass="mt-4 w-full"
+              [disabled]="evento.isUserRegistered"
+            ></p-button>
+          </div>
+        </ng-template>
       </p-card>
+      
 
-      <!-- Organizaciones Registradas -->
-      <p-card header="Organizaciones Registradas" subheader="Conoce las organizaciones en la plataforma">
-        <p-scrollPanel [style]="{width: '100%', height: '600px'}">
-          <div class="space-y-4">
-            <p-card *ngFor="let org of organizations" styleClass="mb-4">
-              <div class="flex items-start gap-4">
-                <p-avatar [image]="org.avatar" shape="circle" size="large"></p-avatar>
-                <div class="flex-1">
-                  <h3 class="font-semibold mb-1">{{ org.name }}</h3>
-                  <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                    <mat-icon class="text-sm">group</mat-icon>
-                    <span>{{ org.volunteers }} voluntarios activos</span>
-                  </div>
-                  <p class="text-sm text-gray-600 mb-3">
-                    {{ org.description }}
-                  </p>
-                  <p-button label="Ver Perfil" styleClass="p-button-outlined p-button-sm"></p-button>
-                </div>
+      <!-- Organizations Section -->
+      <p-card styleClass="border-0 shadow-lg">
+        <ng-template pTemplate="header">
+          <h2 class="text-2xl font-bold p-4">Organizaciones</h2>
+          <p class="text-gray-600 px-4 pb-4">
+            Conoce las organizaciones registradas en la plataforma
+          </p>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <div class="grid gap-6">
+            <div
+              *ngFor="let org of organizations"
+              class="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-semibold text-lg text-primary">
+                  {{ org.nombre }}
+                </h3>
+                <p-badge [value]="org.tipo"></p-badge>
               </div>
-            </p-card>
+              <p class="text-gray-600 mb-4">{{ org.descripcion }}</p>
+              <div class="flex items-center gap-2 text-sm text-gray-500">
+                <i class="pi pi-globe"></i>
+                <a
+                  [href]="'https://' + org.website"
+                  class="text-primary hover:underline"
+                  >{{ org.website }}</a
+                >
+              </div>
+            </div>
           </div>
-        </p-scrollPanel>
+        </ng-template>
       </p-card>
     </div>
   </div>
+</div>

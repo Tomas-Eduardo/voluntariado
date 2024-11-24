@@ -5,6 +5,12 @@ import { DashboardComponent } from './components/app-module/dashboard/dashboard.
 import { authGuard } from './guards/auth.guard';
 import { DashboardAdminComponent } from './components/app-module/dashboard-admin/dashboard-admin.component';
 import { DashboardOrganizadorComponent } from './components/app-module/dashboard-organizador/dashboard-organizador.component';
+import { UserListComponent } from './components/app-module/dashboard-admin/user-list/user-list.component';
+import { UserEditComponent } from './components/app-module/dashboard-admin/user-edit/user-edit.component';
+import { EventFormComponent } from './components/app-module/dashboard-organizador/event-form/event-form.component';
+import { EventFormEdit } from './components/app-module/dashboard-organizador/event-form-edit/event-form-edit.component';
+import { UsuarioEventosComponent } from './components/app-module/dashboard/usuario-eventos/usuario-eventos.component';
+import { OrganizacionesListComponent } from './components/app-module/dashboard-admin/organizaciones-list/organizaciones-list.component';
 
 export const routes: Routes = [
     {
@@ -26,13 +32,43 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: "user-dashboard/usuario-eventos",
+        component: UsuarioEventosComponent,
+        canActivate: [authGuard]
+    },
+    {
         path: 'admin-dashboard',
         component: DashboardAdminComponent,
         canActivate: [authGuard]
     },
     {
+        path: 'admin-dashboard/org-list',
+        component: OrganizacionesListComponent,
+        canActivate: [authGuard]
+    },
+    {
         path: 'organizador-dashboard',
         component: DashboardOrganizadorComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'admin-dashboard/user-list',
+        component: UserListComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'admin-dashboard/user-edit/:id',
+        component: UserEditComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'organizador-dashboard/event-create',
+        component: EventFormComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'organizador-dashboard/event-edit/:id',
+        component: EventFormEdit,
         canActivate: [authGuard]
     }
 ];

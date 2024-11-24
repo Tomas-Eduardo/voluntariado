@@ -1,0 +1,89 @@
+<div class="p-6 bg-white rounded-lg shadow-sm">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Lista de Usuarios</h2>
+  </div>
+
+  <p-table
+    #dt
+    [value]="users"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    responsiveLayout="scroll"
+    [globalFilterFields]="['nombre', 'email', 'roles']"
+    [resizableColumns]="true"
+    [reorderableColumns]="true"
+    styleClass="p-datatable-gridlines"
+  >
+    <ng-template pTemplate="header">
+      <tr class="bg-gray-50">
+        <th pSortableColumn="nombre">
+          Nombre <p-sortIcon field="nombre"></p-sortIcon>
+        </th>
+        <th pSortableColumn="email">
+          Email <p-sortIcon field="email"></p-sortIcon>
+        </th>
+        <th pSortableColumn="fechaNacimiento">
+          Fecha de Nacimiento <p-sortIcon field="fechaNacimiento"></p-sortIcon>
+        </th>
+        <th pSortableColumn="roles">
+          Roles <p-sortIcon field="roles"></p-sortIcon>
+        </th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.nombre }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.fechaNacimiento | date : "dd/MM/yyyy" }}</td>
+        <td>
+          <div class="flex flex-wrap gap-2">
+            <ng-container *ngFor="let role of getUserRoles(user)">
+              <span
+                *ngIf="role === 'Administrador'"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+              >
+                {{ role }}
+              </span>
+              <span
+                *ngIf="role === 'Voluntario'"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+              >
+                {{ role }}
+              </span>
+              <span
+                *ngIf="role === 'Organizador'"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                {{ role }}
+              </span>
+            </ng-container>
+          </div>
+        </td>
+        <td class="flex gap-2">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info"
+            [routerLink]="['/admin-dashboard/user-edit', user.id]"
+            routerLinkActive="router-link-active"
+            title="Update"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="onDelete(user)"
+            title="Delete"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

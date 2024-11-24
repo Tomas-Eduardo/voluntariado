@@ -1,128 +1,211 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
-import { ProgressBarModule } from 'primeng/progressbar';
 import { TagModule } from 'primeng/tag';
-import { MatIconModule } from '@angular/material/icon';
-import { TooltipModule } from 'primeng/tooltip';
+import { OrganizacionService } from '../../../services/organizacion.service';
+import { EventService } from '../../../services/event.service';
+import { Organizacion } from '../../../models/organizacion';
+import { Evento } from '../../../models/evento';
+import { RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-dashboard-organizador',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, ChartModule, TableModule, ProgressBarModule, TagModule, MatIconModule, TooltipModule],
+  imports: [
+    CommonModule,
+    CardModule,
+    ButtonModule,
+    ChartModule,
+    TableModule,
+    TagModule,
+    RouterLink,
+  ],
   templateUrl: './dashboard-organizador.component.html',
-  styleUrl: './dashboard-organizador.component.scss'
+  styleUrls: ['./dashboard-organizador.component.scss'],
 })
-export class DashboardOrganizadorComponent {
+export class DashboardOrganizadorComponent implements OnInit {
+  organizacion!: Organizacion;
+  eventParticipationData: any;
+  upcomingEvents: Evento[] = [];
+  chartOptions: any;
 
-  @NgModule({
+  constructor(
+    private organizacionService: OrganizacionService,
+    private eventService: EventService
+  ) {}
 
-    declarations: [
-  
-      DashboardOrganizadorComponent
-  
-    ],
-  
-    imports: [
-  
-      CommonModule,
-  
-      ChartModule,
-  
-      TableModule,
-  
-      ProgressBarModule,
-  
-      TagModule,
-  
-      MatIconModule,
-  
-      TooltipModule
-  
-    ]
-  
-  })
+  ngOnInit(): void {
+    this.loadOrganizationData();
+    this.initializeChartOptions();
+  }
 
-  eventParticipationData = {
-    labels: ['Limpieza de Playa', 'Reforestación', 'Campaña de Reciclaje', 'Ayuda Comunitaria', 'Educación Ambiental'],
-    datasets: [
-      {
-        label: 'Voluntarios Registrados',
-        backgroundColor: '#42A5F5',
-        data: [65, 59, 80, 81, 56]
-      }
-    ]
-  };
-
-  volunteerDistributionData = {
-    labels: ['18-25 años', '26-35 años', '36-45 años', '46-55 años', '56+ años'],
-    datasets: [
-      {
-        data: [30, 50, 20, 15, 12],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
-      }
-    ]
-  };
-
-  chartOptions = {
-    plugins: {
-      legend: {
-        labels: {
-          color: '#495057'
+  loadOrganizationData(): void {
+    this.organizacionService.getUserOrganization().subscribe({
+      next: (org) => {
+        if (!org || !org.id) {
+          console.error('Organización no encontrada o no válida:', org);
+          return;
         }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true
-      }
+        this.organizacion = { ...org, eventos: org.eventos || [] };
+        console.log('Organización cargada:', this.organizacion);
+        this.loadEventData();
+      },
+      error: (err) => {
+        console.error('Error al cargar la organización:', err);
+      },
+    });
+  }
+
+  loadEventData(): void {
+    this.eventService.findAll().subscribe({
+      next: (events: Evento[]) => {
+        console.log('Eventos cargados (raw):', events);
+
+        // Formatear datos con AM/PM
+        this.organizacion.eventos = events
+          .map((event) => ({
+            ...event,
+            horarioFormateado: event.horario
+              ? moment
+                  .tz(`1970-01-01T${event.horario}`, 'America/Santiago')
+                  .format('hh:mm A')
+              : '00:00 AM', // Por defecto si no hay horario
+          }))
+          .filter((event) => event.organizacion?.id === this.organizacion.id);
+
+        console.log(
+          'Eventos filtrados y procesados:',
+          this.organizacion.eventos
+        );
+
+        this.initializeDashboardData();
+      },
+      error: (err) => {
+        console.error('Error al cargar los eventos:', err);
+      },
+    });
+  }
+
+  initializeChartOptions(): void {
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        y: {
+          ticks: {
+            beginAtZero: true, // Asegura que el gráfico comience desde cero
+            callback: function (value: number) {
+              return value % 1 === 0 ? value : ''; // Muestra solo enteros, omite decimales
+            },
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#495057',
+          },
+        },
+      },
+    };
+  }
+
+  initializeDashboardData(): void {
+    if (!this.organizacion?.eventos || this.organizacion.eventos.length === 0) {
+      console.log('No hay eventos disponibles');
+      return;
     }
-  };
-
-  upcomingEvents = [
-    { name: 'Limpieza de Playa', date: '2023-06-15', registrationProgress: 75, registeredVolunteers: 30, totalSpots: 40, status: 'Abierto' },
-    { name: 'Reforestación', date: '2023-06-22', registrationProgress: 50, registeredVolunteers: 20, totalSpots: 40, status: 'Abierto' },
-    { name: 'Campaña de Reciclaje', date: '2023-06-29', registrationProgress: 100, registeredVolunteers: 25, totalSpots: 25, status: 'Completo' },
-    { name: 'Ayuda Comunitaria', date: '2023-07-05', registrationProgress: 25, registeredVolunteers: 10, totalSpots: 40, status: 'Abierto' },
-    { name: 'Educación Ambiental', date: '2023-07-12', registrationProgress: 0, registeredVolunteers: 0, totalSpots: 30, status: 'Próximo' }
-  ];
-
-  topVolunteers = [
-    { name: 'Ana García', eventsParticipated: 12, hoursDonated: 48},
-    { name: 'Carlos Rodríguez', eventsParticipated: 10, hoursDonated: 40},
-    { name: 'María López', eventsParticipated: 8, hoursDonated: 32},
-    { name: 'Juan Martínez', eventsParticipated: 7, hoursDonated: 28},
-    { name: 'Laura Sánchez', eventsParticipated: 6, hoursDonated: 24 }
-  ];
-
-  getEventStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
-
-    switch (status) {
   
-      case 'Completed':
+    console.log('Eventos de la organización:', this.organizacion.eventos);
   
+    // Inicializa datos de participación
+    this.eventParticipationData = {
+      labels: this.organizacion.eventos.map(
+        (event) => event.nombre || 'Evento sin nombre'
+      ),
+      datasets: [
+        {
+          label: 'Voluntarios',
+          data: this.organizacion.eventos.map(
+            (event) => event.voluntarios?.length || 0
+          ),
+          backgroundColor: '#42A5F5',
+        },
+      ],
+    };
+  
+    // Formatear fechas en formato día/mes/año
+    this.upcomingEvents = this.organizacion.eventos.map((event) => ({
+      ...event,
+      fechaFormateada: moment
+        .tz(event.fecha, 'America/Santiago')
+        .format('DD/MM/YYYY'),
+      fecha: new Date(
+        moment.tz(event.fecha, 'America/Santiago').format('YYYY-MM-DDTHH:mm:ss')
+      ),
+    }));
+  
+    console.log('Eventos de la organización (formateados):', this.upcomingEvents);
+  }
+  
+
+  getEventStatusSeverity(
+    estado: string
+  ): 'success' | 'info' | 'warning' | 'danger' {
+    switch (estado) {
+      case 'Activo':
         return 'success';
-  
-      case 'In Progress':
-  
+      case 'Pendiente':
         return 'info';
-  
-      case 'Pending':
-  
-        return 'warning';
-  
-      case 'Cancelled':
-  
+      case 'Cancelado':
         return 'danger';
-  
       default:
-  
-        return 'secondary';
-  
+        return 'warning';
     }
-  
+  }
+
+  onDelete(evento: Evento): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Deseas eliminar el evento ${evento.nombre}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eventService.deleteEvent(evento.id).subscribe({
+          next: () => {
+            console.log('Evento eliminado:', evento);
+
+            // Actualiza la lista de eventos en el frontend
+            this.organizacion.eventos = this.organizacion.eventos?.filter(
+              (e) => e.id !== evento.id
+            );
+            this.initializeDashboardData(); // Actualiza gráficos y datos
+
+            Swal.fire(
+              'Eliminado!',
+              'El evento ha sido eliminado correctamente.',
+              'success'
+            );
+          },
+          error: (error) => {
+            console.error('Error al eliminar el evento:', error);
+            Swal.fire(
+              'Error',
+              'Hubo un problema al eliminar el evento.',
+              'error'
+            );
+          },
+        });
+      }
+    });
   }
 }

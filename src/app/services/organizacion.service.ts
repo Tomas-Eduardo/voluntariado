@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Organizacion } from '../models/organizacion';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrganizacionService {
-
   private url: string = 'http://localhost:8080/api/organization';
 
-  constructor(
-    private http: HttpClient
-  ) { }
-
+  constructor(private http: HttpClient) {}
 
   findAll(): Observable<Organizacion[]> {
-    return this.http.get<Organizacion[]>(this.url);
+    return this.http.get<Organizacion[]>('http://localhost:8080/api/organization');
   }
 
   findById(id: number): Observable<Organizacion> {
@@ -35,4 +31,13 @@ export class OrganizacionService {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
 
+  private handleError(error: HttpErrorResponse) {
+    console.error('Error al cargar organizaciones:', error);
+    return throwError(() => new Error('Error al cargar organizaciones'));
+  }
+
+  getUserOrganization(): Observable<Organizacion> {
+    return this.http.get<Organizacion>(`${this.url}/user`).pipe(catchError(this.handleError));
+  }
+  
 }

@@ -14,12 +14,13 @@ import { ContactService } from '../../../services/contact.service';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DialogModule } from 'primeng/dialog';
 import Swal from 'sweetalert2';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, ChartModule, TableModule, MatIconModule, ScrollPanelModule, DialogModule],
+  imports: [CommonModule, CardModule, ButtonModule, ChartModule, TableModule, MatIconModule, ScrollPanelModule, DialogModule, RouterLink],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.scss']
 })
@@ -51,6 +52,7 @@ export class DashboardAdminComponent implements OnInit {
     this.orgService.findAll().subscribe(orgs => {
       this.orgs = orgs;
       this.updateOrgStatistics(orgs);
+      console.log('Organizaciones:', orgs);
     });
 
     this.contactService.findAll().subscribe(contacts => {
@@ -59,6 +61,7 @@ export class DashboardAdminComponent implements OnInit {
     });
   
   }
+  
   showMessage(contact: Contact) {
     this.selectedContact = contact;
     this.displayMessage = true;
@@ -163,13 +166,24 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   chartOptions = {
+    responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          beginAtZero: true, // Asegura que el gráfico comience desde cero
+          callback: function (value: number) {
+            return value % 1 === 0 ? value : ''; // Muestra solo enteros, omite decimales
+          },
+        },
+      },
+    },
     plugins: {
       legend: {
         labels: {
-          color: '#495057'
-        }
-      }
-    }
+          color: '#495057',
+        },
+      },
+    },
   };
 
 }

@@ -38,6 +38,18 @@ export class NavbarComponent implements OnInit {
     return this.authService.isAuth();
   }
 
+  isAdmin() {
+    return this.authService.hasAdminRole();
+  }
+
+  isOrganizador() {
+    return this.authService.hasOrganizadorRole();
+  }
+
+  isVolunteer(){
+    return this.authService.hasVolunteerRole();
+  }
+
   notAuth() {
     return !this.authService.isAuth();
   }

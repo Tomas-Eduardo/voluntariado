@@ -1,0 +1,66 @@
+<div class="max-w-2xl mx-auto p-6">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800">Editar Usuario</h2>
+
+    <!-- Formulario de edición de usuario -->
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Selector de Organización -->
+      <div class="space-y-2">
+        <label for="organization" class="block text-sm font-medium text-gray-700">
+          Organización
+        </label>
+        <p-dropdown
+          [options]="organizations"
+          formControlName="organization"
+          optionLabel="label"
+          optionValue="value"
+          [filter]="true"
+          filterBy="label"
+          [showClear]="true"
+          placeholder="Seleccionar organización"
+          class="w-full"
+          inputId="organization"
+        ></p-dropdown>
+      </div>
+
+      <!-- Selector de Roles -->
+      <div class="space-y-2">
+        <label for="roles" class="block text-sm font-medium text-gray-700">
+          Roles
+        </label>
+        <p-multiSelect
+          [options]="roles"                
+          formControlName="roles"         
+          optionLabel="label"             
+          optionValue="value"             
+          defaultLabel="Seleccionar roles" 
+          [showHeader]="false"
+          [style]="{'width': '100%'}"
+          display="chip"                  
+          inputId="roles"
+        ></p-multiSelect>
+        <p *ngIf="userForm.get('roles')?.invalid && userForm.get('roles')?.touched" class="text-red-500 text-sm">
+          Selecciona al menos un rol.
+        </p>
+      </div>
+      
+
+      <!-- Botones de Acción -->
+      <div class="flex justify-end gap-4 pt-4">
+        <p-button
+          label="Cancelar"
+          type="button"
+          (onClick)="onCancel()"
+          severity="secondary"
+          [outlined]="true"
+        ></p-button>
+        <p-button
+          label="Guardar"
+          type="submit"
+          [loading]="loading"
+          [disabled]="!userForm.valid"
+        ></p-button>
+      </div>
+    </form>
+  </div>
+</div>

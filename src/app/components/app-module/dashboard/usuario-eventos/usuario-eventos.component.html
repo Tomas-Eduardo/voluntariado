@@ -1,0 +1,62 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold text-primary mb-6">Mis Eventos Inscritos</h1>
+
+  <div class="grid md:grid-cols-1 gap-6 mb-6">
+    <p-card styleClass="h-full">
+      <div class="flex flex-col items-center justify-center h-full">
+        <h2 class="text-2xl font-semibold mb-2">Eventos Inscritos</h2>
+        <div class="text-4xl font-bold text-primary">
+          {{ events.length || 0 }}
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="grid md:grid-cols-1 gap-6 mb-6">
+    <p-card header="Mis Eventos Inscritos">
+      <p-table
+        [value]="events"
+        [rows]="5"
+        [paginator]="true"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Ubicación</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+          <tr>
+            <td>{{ event.nombre }}</td>
+            <td>{{ event.fecha | date : "dd/MM/YYYY" }}</td>
+            <td>{{ formatTime(event.horario) }}</td>
+            <td>{{ event.ciudad }}</td>
+            <td>{{ event.descripcion }}</td>
+            <td>
+              <button
+                pButton
+                type="button"
+                label="Cancelar Asistencia"
+                icon="pi pi-times"
+                class="p-button-rounded p-button-danger bg-red-500 text-white border-2 border-red-500 hover:bg-red-600 focus:bg-red-700 active:bg-red-700 text-sm py-1 px-4"
+                (click)="cancelarAsist(event)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="empty">
+          <tr>
+            <td colspan="6" class="text-center text-gray-500">
+              No tienes eventos inscritos aún
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

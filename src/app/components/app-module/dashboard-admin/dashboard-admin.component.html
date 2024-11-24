@@ -1,185 +1,224 @@
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-primary mb-6">Dashboard de Administrador</h1>
+  <h1 class="text-3xl font-bold text-primary mb-6">
+    Dashboard de Administrador
+  </h1>
 
-    <div class="grid md:grid-cols-2 gap-6 mb-6">
-      <p-card>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-semibold">Resumen de Usuarios</h2>
-          <p-button label="Ver todos los usuarios" icon="pi pi-users" styleClass="p-button-outlined"></p-button>
-        </div>
-        <p-chart type="doughnut" [data]="userData" [options]="chartOptions" height="200px"></p-chart>
-      </p-card>
-
-      <p-card>
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-semibold">Resumen de Organizaciones</h2>
-          <p-button label="Ver todas las organizaciones" icon="pi pi-building" styleClass="p-button-outlined"></p-button>
-        </div>
-        <p-chart type="bar" [data]="orgData" [options]="chartOptions" height="200px"></p-chart>
-      </p-card>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-      <p-card header="Usuarios Recientes">
-        <p-table [value]="users" [rows]="5" [paginator]="true" [responsiveLayout]="'scroll'">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Fecha de Nacimiento</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-user>
-            <tr>
-              <td>{{ user.nombre }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.fechaNacimiento | date: 'dd/MM/yyyy' }}</td> <!-- Formato de fecha -->
-            </tr>
-          </ng-template>
-        </p-table>
-      </p-card>
-      
-
-      <p-card header="Organizaciones Recientes">
-        <p-table [value]="orgs" [rows]="5" [paginator]="true" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Nombre</th>
-              <th>Tipo</th>
-              <th>Telefono</th>
-              <th>Website</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-org>
-            <tr>
-              <td>{{org.nombre}}</td>
-              <td>{{org.tipo}}</td>
-              <td>{{org.telefono}}</td>
-              <td>{{org.website}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </p-card>
-    </div>
-    <div class="card pt-5">
-      <!-- Header Section -->
-      <div class="flex justify-between items-center mb-4">
-        <div>
-          <h2 class="text-xl font-medium m-0">Mensajes de Contacto</h2>
-          <p class="text-gray-600 text-sm mt-1">Mensajes enviados por los usuarios</p>
-        </div>
-        <p-button 
-          icon="pi pi-envelope" 
-          label="Ver todos los mensajes"
-          [text]="true"
-          [rounded]="true">
-        </p-button>
+  <div class="grid md:grid-cols-2 gap-6 mb-6">
+    <p-card>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">Resumen de Usuarios</h2>
+        <p-button
+          label="Ver todos los usuarios"
+          icon="pi pi-users"
+          styleClass="p-button-outlined"
+          [routerLink]="['/admin-dashboard/user-list']"
+        ></p-button>
       </div>
-    
-      <!-- Messages Table -->
-      <p-table 
-        [value]="contacts" 
-        [paginator]="true" 
+      <p-chart
+        type="doughnut"
+        [data]="userData"
+        [options]="chartOptions"
+        height="200px"
+      ></p-chart>
+    </p-card>
+
+    <p-card>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">Resumen de Organizaciones</h2>
+        <p-button
+          label="Ver todas las organizaciones"
+          [routerLink]="['/admin-dashboard/org-list']"
+          icon="pi pi-building"
+          styleClass="p-button-outlined"
+        ></p-button>
+      </div>
+      <p-chart
+        type="bar"
+        [data]="orgData"
+        [options]="chartOptions"
+        height="200px"
+      ></p-chart>
+    </p-card>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <p-card header="Usuarios Recientes">
+      <p-table
+        [value]="users"
         [rows]="5"
-        [showCurrentPageReport]="true"
-        responsiveLayout="scroll"
-        [rowHover]="true"
-        styleClass="p-datatable-sm">
-        
+        [paginator]="true"
+        [responsiveLayout]="'scroll'"
+      >
         <ng-template pTemplate="header">
           <tr>
             <th>Nombre</th>
             <th>Email</th>
-            <th>Asunto</th>
-            <th>Mensaje</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
+            <th>Fecha de Nacimiento</th>
           </tr>
         </ng-template>
-    
-        <ng-template pTemplate="body" let-contact>
+        <ng-template pTemplate="body" let-user>
           <tr>
-            <td>
-              <span class="font-medium">{{contact.nombre}}</span>
-            </td>
-            <td>{{contact.email}}</td>
-            <td>{{contact.asunto}}</td>
-            <td>
-              <p-button 
-                icon="pi pi-eye" 
-                (click)="showMessage(contact)"
-                [text]="true"
-                [rounded]="true"
-                tooltip="Ver mensaje completo">
-              </p-button>
-            </td>
-            <td>{{contact.fecha | date:'dd/MM/yyyy'}}</td>
-            <td>
-              <div class="flex gap-2">
-                <p-button 
-                  icon="pi pi-reply" 
-                  severity="success"
-                  [text]="true"
-                  [rounded]="true"
-                  tooltip="Responder">
-                </p-button>
-                <p-button 
-                  icon="pi pi-trash" 
-                  severity="danger"
-                  [text]="true"
-                  [rounded]="true"
-                  tooltip="Eliminar"
-                  (click)="deleteContact(contact)">
-                </p-button>
-
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-    
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="6" class="text-center p-4">
-              No hay mensajes de contacto disponibles.
-            </td>
+            <td>{{ user.nombre }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.fechaNacimiento | date : "dd/MM/yyyy" }}</td>
+            <!-- Formato de fecha -->
           </tr>
         </ng-template>
       </p-table>
-    </div>
-    
-    <!-- Message Dialog -->
-    <p-dialog 
-      [(visible)]="displayMessage" 
-      [modal]="true"
-      [style]="{width: '450px'}"
-      header="Detalle del Mensaje">
-      <ng-template pTemplate="content">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Nombre</label>
-            <p class="mt-1">{{selectedContact?.nombre}}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Email</label>
-            <p class="mt-1">{{selectedContact?.email}}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Asunto</label>
-            <p class="mt-1">{{selectedContact?.asunto}}</p>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Mensaje</label>
-            <p class="mt-1">{{selectedContact?.mensaje}}</p>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="footer">
-        <p-button 
-          icon="pi pi-times" 
-          (click)="displayMessage=false" 
-          label="Cerrar"
-          [outlined]="true">
-        </p-button>
-      </ng-template>
-    </p-dialog>
+    </p-card>
+
+    <p-card header="Organizaciones Recientes">
+      <p-table
+        [value]="orgs"
+        [rows]="5"
+        [paginator]="true"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Telefono</th>
+            <th>Website</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-org>
+          <tr>
+            <td>{{ org.nombre }}</td>
+            <td>{{ org.tipo }}</td>
+            <td>{{ org.telefono }}</td>
+            <td>{{ org.website }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
   </div>
+  <div class="card pt-5">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <h2 class="text-xl font-medium m-0">Mensajes de Contacto</h2>
+        <p class="text-gray-600 text-sm mt-1">
+          Mensajes enviados por los usuarios
+        </p>
+      </div>
+      <p-button
+        icon="pi pi-envelope"
+        label="Ver todos los mensajes"
+        [text]="true"
+        [rounded]="true"
+      >
+      </p-button>
+    </div>
+
+    <!-- Messages Table -->
+    <p-table
+      [value]="contacts"
+      [paginator]="true"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Asunto</th>
+          <th>Mensaje</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-contact>
+        <tr>
+          <td>
+            <span class="font-medium">{{ contact.nombre }}</span>
+          </td>
+          <td>{{ contact.email }}</td>
+          <td>{{ contact.asunto }}</td>
+          <td>
+            <p-button
+              icon="pi pi-eye"
+              (click)="showMessage(contact)"
+              [text]="true"
+              [rounded]="true"
+              tooltip="Ver mensaje completo"
+            >
+            </p-button>
+          </td>
+          <td>{{ contact.fecha | date : "dd/MM/yyyy" }}</td>
+          <td>
+            <div class="flex gap-2">
+              <p-button
+                icon="pi pi-reply"
+                severity="success"
+                [text]="true"
+                [rounded]="true"
+                tooltip="Responder"
+              >
+              </p-button>
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                tooltip="Eliminar"
+                (click)="deleteContact(contact)"
+              >
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center p-4">
+            No hay mensajes de contacto disponibles.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Message Dialog -->
+  <p-dialog
+    [(visible)]="displayMessage"
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    header="Detalle del Mensaje"
+  >
+    <ng-template pTemplate="content">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nombre</label>
+          <p class="mt-1">{{ selectedContact?.nombre }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <p class="mt-1">{{ selectedContact?.email }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Asunto</label>
+          <p class="mt-1">{{ selectedContact?.asunto }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Mensaje</label>
+          <p class="mt-1">{{ selectedContact?.mensaje }}</p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button
+        icon="pi pi-times"
+        (click)="displayMessage = false"
+        label="Cerrar"
+        [outlined]="true"
+      >
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>

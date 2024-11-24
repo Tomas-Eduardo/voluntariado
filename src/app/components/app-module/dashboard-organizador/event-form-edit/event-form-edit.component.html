@@ -1,0 +1,149 @@
+<div class="max-w-2xl mx-auto p-6">
+  <div class="card p-6 shadow-lg">
+    <h2 class="text-2xl font-semibold mb-6">Editar Evento</h2>
+
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Nombre del Evento -->
+      <div class="field">
+        <label for="nombre" class="block text-sm font-medium mb-2 text-gray-700">Nombre del Evento</label>
+        <input
+          pInputText
+          id="nombre"
+          formControlName="nombre"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <small class="text-red-500" *ngIf="submitted() && eventForm.get('nombre')?.errors?.['required']">
+          El nombre es requerido
+        </small>
+      </div>
+
+      <!-- Fecha -->
+      <div class="field">
+        <label for="fecha" class="block text-sm font-medium mb-2 text-gray-700">Fecha</label>
+        <p-calendar
+          id="fecha"
+          formControlName="fecha"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          [minDate]="minDate"
+          class="p-inputtext p-inputtext-sm w-full"
+        ></p-calendar>
+        <small class="text-red-500" *ngIf="submitted() && eventForm.get('fecha')?.errors?.['required']">
+          La fecha es requerida
+        </small>
+      </div>
+
+      <!-- Hora -->
+      <div class="field">
+        <label for="horario" class="block text-sm font-medium mb-2 text-gray-700">Hora</label>
+        <p-calendar
+          id="horario"
+          formControlName="horario"
+          [showIcon]="true"
+          timeOnly="true"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          class="p-inputtext p-inputtext-sm w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ></p-calendar>
+        <small class="text-red-500" *ngIf="submitted() && eventForm.get('horario')?.errors?.['required']">
+          La hora es requerida
+        </small>
+      </div>
+
+      <!-- Descripción -->
+      <div class="field">
+        <label for="descripcion" class="block text-sm font-medium mb-2 text-gray-700">Descripción</label>
+        <textarea
+          pInputTextarea
+          id="descripcion"
+          formControlName="descripcion"
+          rows="4"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ></textarea>
+        <small class="text-red-500" *ngIf="submitted() && eventForm.get('descripcion')?.errors?.['required']">
+          La descripción es requerida
+        </small>
+      </div>
+
+      <!-- Dirección -->
+      <div class="field">
+        <label for="direccion" class="block text-sm font-medium mb-2 text-gray-700">Dirección</label>
+        <input
+          pInputText
+          id="direccion"
+          formControlName="direccion"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <small class="text-red-500" *ngIf="submitted() && eventForm.get('direccion')?.errors?.['required']">
+          La dirección es obligatoria
+        </small>
+      </div>
+
+      <!-- Ciudad y Estado -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="field">
+          <label
+            for="ciudad"
+            class="block text-sm font-medium mb-2 text-gray-700"
+            >Ciudad</label
+          >
+          <input
+            pInputText
+            id="ciudad"
+            formControlName="ciudad"
+            class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small
+            class="text-red-500"
+            *ngIf="submitted() && eventForm.get('ciudad')?.errors?.['required']"
+          >
+            La ciudad es requerida
+          </small>
+        </div>
+
+        <div class="field">
+          <label
+            for="estado"
+            class="block text-sm font-medium mb-2 text-gray-700"
+            >Estado</label
+          >
+          <p-dropdown
+            id="estado"
+            formControlName="estado"
+            [options]="estados"
+            optionLabel="name"
+            optionValue="code"
+            [style]="{ width: '100%' }"
+            placeholder="Selecciona un estado"
+            class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          ></p-dropdown>
+          <small
+            class="text-red-500"
+            *ngIf="submitted() && eventForm.get('estado')?.errors?.['required']"
+          >
+            El estado es requerido
+          </small>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end space-x-3">
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          class="p-button-outlined"
+          (click)="onCancel()"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Guardar Cambios"
+          class="p-button-primary"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>
