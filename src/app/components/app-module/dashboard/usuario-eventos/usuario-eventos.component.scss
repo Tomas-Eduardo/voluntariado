@@ -1,22 +1,35 @@
-.event-card {
-    margin-top: 20px;
-  }
-  
-  .my-table {
-    width: 100%;
-  }
-  
-  .my-table th {
-    background-color: #1e90ff;
-    color: white;
-  }
-  
-  .my-table td {
-    text-align: left;
-    padding: 8px;
-  }
-  
-  button {
-    margin: 0 5px;
-  }
-  
+/* usuario-eventos.component.scss */
+.calendar-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.w-1-4{
+  max-width: 25%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.p-datatable-sm .p-datatable-tbody tr:hover {
+  cursor: pointer;
+  background-color: #f1f5f9; /* Light hover color */
+}

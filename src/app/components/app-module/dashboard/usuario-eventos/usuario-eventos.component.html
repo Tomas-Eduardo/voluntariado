@@ -1,62 +1,27 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold text-primary mb-6">Mis Eventos Inscritos</h1>
-
-  <div class="grid md:grid-cols-1 gap-6 mb-6">
-    <p-card styleClass="h-full">
-      <div class="flex flex-col items-center justify-center h-full">
-        <h2 class="text-2xl font-semibold mb-2">Eventos Inscritos</h2>
-        <div class="text-4xl font-bold text-primary">
-          {{ events.length || 0 }}
-        </div>
-      </div>
-    </p-card>
+<div class="flex justify-center space-x-4 p-4">
+  <!-- Panel lateral de eventos -->
+  <div class="w-full sm:w-1/3 md:w-1/4 p-4 bg-white shadow-lg rounded-lg">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Mis Eventos</h3>
+    <p-table [value]="userEvents" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-left text-lg font-medium text-gray-700">Nombre</th>
+          <th class="text-left text-lg font-medium text-gray-700">Fecha</th>
+          <th class="text-left text-lg font-medium text-gray-700">Horario</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-event>
+        <tr (click)="goToEvent(event)" class="cursor-pointer hover:bg-indigo-100 transition-colors rounded-lg">
+          <td class="p-2 text-gray-800">{{ event.nombre }}</td>
+          <td class="p-2 text-gray-500">{{ event.fecha | date: 'dd/MM/yyyy' }}</td>
+          <td class="p-2 text-gray-500">{{ formatTime(event.horario) }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 
-  <div class="grid md:grid-cols-1 gap-6 mb-6">
-    <p-card header="Mis Eventos Inscritos">
-      <p-table
-        [value]="events"
-        [rows]="5"
-        [paginator]="true"
-        responsiveLayout="scroll"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Nombre</th>
-            <th>Fecha</th>
-            <th>Horario</th>
-            <th>Ubicación</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-event>
-          <tr>
-            <td>{{ event.nombre }}</td>
-            <td>{{ event.fecha | date : "dd/MM/YYYY" }}</td>
-            <td>{{ formatTime(event.horario) }}</td>
-            <td>{{ event.ciudad }}</td>
-            <td>{{ event.descripcion }}</td>
-            <td>
-              <button
-                pButton
-                type="button"
-                label="Cancelar Asistencia"
-                icon="pi pi-times"
-                class="p-button-rounded p-button-danger bg-red-500 text-white border-2 border-red-500 hover:bg-red-600 focus:bg-red-700 active:bg-red-700 text-sm py-1 px-4"
-                (click)="cancelarAsist(event)"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="empty">
-          <tr>
-            <td colspan="6" class="text-center text-gray-500">
-              No tienes eventos inscritos aún
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-card>
+  <!-- Calendario -->
+  <div class="flex-1 p-4 max-w-4xl mx-auto">
+    <full-calendar *ngIf="calendarVisible()" [options]="calendarOptions()"></full-calendar>
   </div>
 </div>
